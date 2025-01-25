@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Create a New Quiz</h1>
+        
+        <form method="POST">
+            <label for="title">Quiz Title:</label>
+            <input type="text" name="title" id="title" required>
+            
+            <label for="num_questions">Number of Questions:</label>
+            <input type="number" name="num_questions" id="num_questions" min="1" required>
+            
+            <!-- Dynamically create question fields based on num_questions -->
+            <div id="question-fields">
+                <!-- Question fields will be added here by JavaScript -->
+            </div>
+            
+            <button type="submit">Create Quiz</button>
+        </form>
+        
+        <a href="{{ url_for('home', username=username) }}">Back to Home</a>
+    </div>
+
+    <script>
+        // Function to dynamically generate question fields based on the number of questions
+        document.getElementById('num_questions').addEventListener('input', function() {
+            let numQuestions = parseInt(this.value);
+            let questionFields = document.getElementById('question-fields');
+            questionFields.innerHTML = '';  // Clear existing fields
+            
+            for (let i = 0; i < numQuestions; i++) {
+                let questionDiv = document.createElement('div');
+                questionDiv.classList.add('question-block');
+                
+                questionDiv.innerHTML = `
+                    <label for="question_${i}">Question ${i + 1}:</label>
+                    <input type="text" name="question_${i}" id="question_${i}" required>
+
+                    <label>Option 1:</label>
+                    <input type="text" name="option_${i}_1" required>
+                    
+                    <label>Option 2:</label>
+                    <input type="text" name="option_${i}_2" required>
+                    
+                    <label>Option 3:</label>
+                    <input type="text" name="option_${i}_3" required>
+                    
+                    <label>Option 4:</label>
+                    <input type="text" name="option_${i}_4" required>
+
+                    <label for="answer_${i}">Correct Option:</label>
+                    <select name="answer_${i}" id="answer_${i}" required>
+                        <option value="0">Option 1</option>
+                        <option value="1">Option 2</option>
+                        <option value="2">Option 3</option>
+                        <option value="3">Option 4</option>
+                    </select>
+                `;
+                
+                questionFields.appendChild(questionDiv);
+            }
+        });
+    </script>
+</body>
+</html>

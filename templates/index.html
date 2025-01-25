@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Quiz Platform</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { width: 80%; margin: 20px auto; }
+        .quiz-list, .quiz { margin-bottom: 20px; }
+        .quiz { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Quiz Platform</h1>
+        <div class="quiz-list">
+            <h2>Available Quizzes</h2>
+            <ul id="quiz-list"></ul>
+        </div>
+        <div class="quiz" id="quiz-container">
+            <h2 id="quiz-title"></h2>
+            <div id="questions-container"></div>
+            <button onclick="submitQuiz()">Submit</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('/api/quizzes')
+                .then(response => response.json())
+                .then(data => {
+                    const quizList = document.getElementById('quiz-list');
+                    data.forEach(quiz => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<button onclick=\"startQuiz('${quiz}')\">${quiz}</button>`;
+                        quizList.appendChild(li);
+                    });
+                });
+        });
+
+        function startQuiz(quizName) {
+            fetch(`/api/quiz/${quizName}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('.quiz-list').style.display = 'none';
+                    const quizContainer = document.getElementById('quiz-container');
+                    quizContainer.style.display = 'block';
+                    document.getElementById('quiz-title').textContent = data.title;
+
+                    const questionsContainer = document.getElementById('questions-container');
+                    questionsContainer.innerHTML = '';
+
+                    data.questions.forEach((q, index) => {
+                        const div = document.createElement('div');
+                        div.innerHTML = `
+                            <p>${q.question}</p>
+                            ${q.options.map((option, i) => `
+                                <label>
+                                    <input type="radio" name="question${index}" value="${option}">
+                                    ${option}
+                                </label><br>
+                            `).join('')}
+                        `;
+                        questionsContainer.appendChild(div);
+                    });
+                });
+        }
+
+        function submitQuiz() {
+            const quizContainer = document.getElementById('questions-container');
+            const inputs = quizContainer.querySelectorAll('input[type="radio"]:checked');
+            const userAnswers = Array.from(inputs).map(input => input.value);
+
+            console.log('User Answers:', userAnswers);
+            alert('Thank you for taking the quiz!');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

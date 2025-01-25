@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - {{ quiz_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Leaderboard Header -->
+        <h1>Leaderboard for "{{ quiz_title }}"</h1>
+
+        <!-- Leaderboard Table -->
+        {% if leaderboard %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rank, entry in enumerate(leaderboard, start=1) %}
+                <tr>
+                    <td>{{ rank }}</td>
+                    <td>{{ entry.username }}</td>
+                    <td>{{ entry.score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No scores available for this quiz yet.</p>
+        {% endif %}
+
+        <!-- Navigation -->
+        <div class="actions">
+            <a href="{{ url_for('home', username=username) }}" class="btn btn-secondary">Back to Home</a>
+
+        </div>
+    </div>
+</body>
+</html>

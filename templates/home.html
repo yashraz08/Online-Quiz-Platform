@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Quiz Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+        
+        <!-- Button to Create a Quiz -->
+        <div class="create-quiz-btn">
+            <a href="{{ url_for('create_quiz', username=username) }}">
+                <button>Create a Quiz</button>
+            </a>
+        </div>
+
+        <h2>Available Quizzes</h2>
+        <ul>
+            {% for title, quiz in quizzes.items() %}
+                <li>
+                    <a href="{{ url_for('take_quiz', quiz_title=title, username=username) }}">{{ quiz['title'] }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('home', username=username) }}">Back to Home</a>
+    </div>
+</body>
+</html>

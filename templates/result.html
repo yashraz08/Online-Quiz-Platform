@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Result</h1>
+        <div class="result">
+            <p>Congratulations, {{ username }}!</p>
+            <p>Your Score: <strong>{{ score }}</strong> / <strong>{{ total }}</strong></p>
+        </div>
+        <div class="actions">
+            <!-- Button to view leaderboard -->
+            <a href="{{ url_for('leaderboard', quiz_title=quiz_title, username=username) }}" class="btn btn-primary">
+                View Leaderboard
+            </a>
+            <!-- Button to go back to home -->
+            <a href="{{ url_for('home', username=username) }}" class="btn btn-secondary">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</body>
+</html>
